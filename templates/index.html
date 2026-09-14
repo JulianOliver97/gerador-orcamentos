@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Gerador de Orçamentos</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <main class="container">
+
+        <header class="topo historico-topo">
+
+    <div>
+
+        <h1>
+            Gerador de Orçamentos
+        </h1>
+
+        <p>
+            Crie propostas comerciais de forma rápida e profissional.
+        </p>
+
+    </div>
+
+
+    <a
+        href="/historico"
+        class="btn-secundario link-botao"
+    >
+        Histórico
+    </a>
+
+</header>
+
+        <form
+            id="form-orcamento"
+            action="/gerar-pdf"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <!-- ================================= -->
+            <!-- DADOS DA EMPRESA -->
+            <!-- ================================= -->
+
+            <section class="card">
+
+                <h2>Dados da Empresa</h2>
+
+                <p class="texto-ajuda">
+                    Estes dados serão salvos automaticamente neste navegador.
+                </p>
+
+
+                <div class="logo-area">
+
+                    <label for="logo">
+                        Logo da empresa
+                    </label>
+
+                    <input
+                        type="file"
+                        id="logo"
+                        name="logo"
+                        accept="image/*"
+                    >
+
+                    <!--
+                    Permite reutilizar a logo salva
+                    mesmo sem selecionar o arquivo novamente.
+                    -->
+                    <input
+                        type="hidden"
+                        id="logo_base64"
+                        name="logo_base64"
+                    >
+
+                    <div id="preview-logo">
+                        Nenhuma logo selecionada
+                    </div>
+
+                </div>
+
+
+                <div class="grid">
+
+                    <div class="campo">
+
+                        <label for="empresa">
+                            Nome / Razão Social *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="empresa"
+                            name="empresa"
+                            placeholder="Nome da empresa"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="cnpj_empresa">
+                            CNPJ
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cnpj_empresa"
+                            name="cnpj_empresa"
+                            placeholder="00.000.000/0001-00"
+                            maxlength="18"
+                        >
+
+                    </div>
+
+
+                    <div class="campo campo-grande">
+
+                        <label for="endereco_empresa">
+                            Endereço
+                        </label>
+
+                        <input
+                            type="text"
+                            id="endereco_empresa"
+                            name="endereco_empresa"
+                            placeholder="Rua, número, bairro, cidade..."
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="telefone">
+                            Telefone
+                        </label>
+
+                        <input
+                            type="text"
+                            id="telefone"
+                            name="telefone"
+                            placeholder="(11) 99999-9999"
+                            maxlength="15"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================= -->
+            <!-- CLIENTE -->
+            <!-- ================================= -->
+
+            <section class="card">
+
+                <h2>Dados do Cliente</h2>
+
+                <div class="grid">
+
+                    <div class="campo">
+
+                        <label for="cliente">
+                            Nome / Empresa *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cliente"
+                            name="cliente"
+                            placeholder="Nome do cliente"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="documento_cliente">
+                            CPF / CNPJ
+                        </label>
+
+                        <input
+                            type="text"
+                            id="documento_cliente"
+                            name="documento_cliente"
+                            placeholder="CPF ou CNPJ"
+                            maxlength="18"
+                        >
+
+                    </div>
+
+
+                    <div class="campo campo-grande">
+
+                        <label for="endereco_cliente">
+                            Endereço
+                        </label>
+
+                        <input
+                            type="text"
+                            id="endereco_cliente"
+                            name="endereco_cliente"
+                            placeholder="Endereço do cliente"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================= -->
+            <!-- SERVIÇOS -->
+            <!-- ================================= -->
+
+            <section class="card">
+
+                <div class="titulo-servicos">
+
+                    <h2>Serviços</h2>
+
+                    <button
+                        type="button"
+                        id="adicionar-servico"
+                        class="btn-secundario"
+                    >
+                        + Adicionar Serviço
+                    </button>
+
+                </div>
+
+
+                <div id="lista-servicos">
+
+                    <div class="servico">
+
+                        <div class="conteudo-servico">
+
+                            <input
+                                type="text"
+                                name="titulos_servicos[]"
+                                placeholder="Título do serviço"
+                                class="titulo-servico"
+                                required
+                            >
+
+                            <textarea
+                                name="descricoes_servicos[]"
+                                placeholder="Descreva detalhadamente o serviço que será realizado..."
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="remover-servico"
+                        >
+                            Remover
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================= -->
+            <!-- CONDIÇÕES DO ORÇAMENTO -->
+            <!-- ================================= -->
+
+            <section class="card">
+
+                <h2>Valores e Condições</h2>
+
+                <div class="grid">
+
+                    <div class="campo">
+
+                        <label for="valor">
+                            Valor total *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="valor"
+                            name="valor"
+                            placeholder="R$ 0,00"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="validade">
+                            Validade do orçamento
+                        </label>
+
+                        <input
+                            type="number"
+                            id="validade"
+                            name="validade"
+                            placeholder="Ex: 15"
+                            min="1"
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="forma_pagamento">
+                            Forma de pagamento
+                        </label>
+
+                        <input
+                            type="text"
+                            id="forma_pagamento"
+                            name="forma_pagamento"
+                            placeholder="Ex: 50% entrada e 50% na conclusão"
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="prazo_execucao">
+                            Prazo de execução
+                        </label>
+
+                        <input
+                            type="text"
+                            id="prazo_execucao"
+                            name="prazo_execucao"
+                            placeholder="Ex: 5 dias úteis"
+                        >
+
+                    </div>
+
+
+                    <div class="campo campo-grande">
+
+                        <label for="observacoes">
+                            Observações
+                        </label>
+
+                        <textarea
+                            id="observacoes"
+                            name="observacoes"
+                            placeholder="Garantia, materiais, condições especiais e outras informações..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================= -->
+            <!-- AÇÕES -->
+            <!-- ================================= -->
+
+            <div class="acoes">
+
+                <button
+                    type="button"
+                    id="limpar-orcamento"
+                    class="btn-secundario"
+                >
+                    Limpar orçamento
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn-principal"
+                >
+                    Gerar Orçamento PDF
+                </button>
+
+            </div>
+
+        </form>
+
+    </main>
+
+
+    <script
+        src="{{ url_for('static', filename='script.js') }}"
+    ></script>
+
+</body>
+
+</html>

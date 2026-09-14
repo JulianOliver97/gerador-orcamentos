@@ -1,0 +1,29 @@
+# Ambiente virtual
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Banco de dados local
+orcamentos.db
+*.db
+
+# Contador local
+contador_orcamentos.txt
+
+# Arquivos gerados
+orcamentos/
+uploads/
+*.pdf
+
+# Variáveis de ambiente
+.env
+
+# VS Code
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Histórico de Orçamentos</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <header class="topo historico-topo">
+
+            <div>
+
+                <h1>
+                    Histórico de Orçamentos
+                </h1>
+
+                <p>
+                    Consulte, edite e gerencie os orçamentos emitidos.
+                </p>
+
+            </div>
+
+            <a
+                href="/"
+                class="btn-principal link-botao"
+            >
+                + Novo Orçamento
+            </a>
+
+        </header>
+
+
+        <section class="card">
+
+            {% if orcamentos %}
+
+                <div class="tabela-historico">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Orçamento</th>
+
+                                <th>Cliente</th>
+
+                                <th>Data</th>
+
+                                <th>Valor</th>
+
+                                <th>Ações</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for orcamento in orcamentos %}
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+                                            {{ orcamento["numero"] }}
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+                                        {{ orcamento["cliente"] }}
+                                    </td>
+
+                                    <td>
+                                        {{ orcamento["data_emissao"] }}
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+                                            {{ orcamento["valor"] }}
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="acoes-historico">
+
+                                            <a
+                                                href="/orcamento/{{ orcamento['id'] }}"
+                                                class="acao visualizar"
+                                            >
+                                                Visualizar
+                                            </a>
+
+
+                                            <a
+                                                href="/orcamento/{{ orcamento['id'] }}/editar"
+                                                class="acao editar"
+                                            >
+                                                Editar
+                                            </a>
+
+
+                                            <a
+                                                href="/orcamento/{{ orcamento['id'] }}/pdf"
+                                                class="acao pdf"
+                                            >
+                                                PDF
+                                            </a>
+
+
+                                            <form
+                                                action="/orcamento/{{ orcamento['id'] }}/excluir"
+                                                method="POST"
+                                                class="form-excluir"
+                                                onsubmit="return confirm('Deseja realmente excluir este orçamento?');"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="acao excluir"
+                                                >
+                                                    Excluir
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="historico-vazio">
+
+                    <h3>
+                        Nenhum orçamento salvo
+                    </h3>
+
+                    <p>
+                        Gere seu primeiro orçamento para ele aparecer aqui.
+                    </p>
+
+                    <a
+                        href="/"
+                        class="btn-principal link-botao"
+                    >
+                        Criar orçamento
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
